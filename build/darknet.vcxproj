@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{1D84BC79-59DB-44B4-8DCB-763C612E851E}</ProjectGuid>
+    <RootNamespace>darknet</RootNamespace>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(SolutionDir)$(Configuration)\objs\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(SolutionDir)$(Configuration)\objs\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <MinimumRequiredVersion />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <MinimumRequiredVersion />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <MinimumRequiredVersion />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <MinimumRequiredVersion />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\darknet\src\unistd.h" />
+    <ClInclude Include="..\darknet\src\utils.h" />
+    <ClInclude Include="..\include\darknet.h" />
+    <ClInclude Include="..\src\build.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\darknet\src\activations.c" />
+    <ClCompile Include="..\darknet\src\activation_layer.c" />
+    <ClCompile Include="..\darknet\src\art.c" />
+    <ClCompile Include="..\darknet\src\avgpool_layer.c" />
+    <ClCompile Include="..\darknet\src\batchnorm_layer.c" />
+    <ClCompile Include="..\darknet\src\blas.c" />
+    <ClCompile Include="..\darknet\src\box.c" />
+    <ClCompile Include="..\darknet\src\captcha.c" />
+    <ClCompile Include="..\darknet\src\cifar.c" />
+    <ClCompile Include="..\darknet\src\classifier.c" />
+    <ClCompile Include="..\darknet\src\col2im.c" />
+    <ClCompile Include="..\darknet\src\compare.c" />
+    <ClCompile Include="..\darknet\src\connected_layer.c" />
+    <ClCompile Include="..\darknet\src\convolutional_layer.c" />
+    <ClCompile Include="..\darknet\src\cost_layer.c" />
+    <ClCompile Include="..\darknet\src\cpu_gemm.c" />
+    <ClCompile Include="..\darknet\src\crnn_layer.c" />
+    <ClCompile Include="..\darknet\src\crop_layer.c" />
+    <ClCompile Include="..\darknet\src\cuda.c" />
+    <ClCompile Include="..\darknet\src\data.c" />
+    <ClCompile Include="..\darknet\src\deconvolutional_layer.c" />
+    <ClCompile Include="..\darknet\src\detection_layer.c" />
+    <ClCompile Include="..\darknet\src\dice.c" />
+    <ClCompile Include="..\darknet\src\dropout_layer.c" />
+    <ClCompile Include="..\darknet\src\gemm.c" />
+    <ClCompile Include="..\darknet\src\getopt.c" />
+    <ClCompile Include="..\darknet\src\gettimeofday.c" />
+    <ClCompile Include="..\darknet\src\go.c" />
+    <ClCompile Include="..\darknet\src\gru_layer.c" />
+    <ClCompile Include="..\darknet\src\im2col.c" />
+    <ClCompile Include="..\darknet\src\image.c" />
+    <ClCompile Include="..\darknet\src\layer.c" />
+    <ClCompile Include="..\darknet\src\list.c" />
+    <ClCompile Include="..\darknet\src\local_layer.c" />
+    <ClCompile Include="..\darknet\src\matrix.c" />
+    <ClCompile Include="..\darknet\src\maxpool_layer.c" />
+    <ClCompile Include="..\darknet\src\network.c" />
+    <ClCompile Include="..\darknet\src\nightmare.c" />
+    <ClCompile Include="..\darknet\src\normalization_layer.c" />
+    <ClCompile Include="..\darknet\src\option_list.c" />
+    <ClCompile Include="..\darknet\src\parser.c" />
+    <ClCompile Include="..\darknet\src\region_layer.c" />
+    <ClCompile Include="..\darknet\src\reorg_layer.c" />
+    <ClCompile Include="..\darknet\src\reorg_old_layer.c" />
+    <ClCompile Include="..\darknet\src\rnn.c" />
+    <ClCompile Include="..\darknet\src\rnn_layer.c" />
+    <ClCompile Include="..\darknet\src\rnn_vid.c" />
+    <ClCompile Include="..\darknet\src\route_layer.c" />
+    <ClCompile Include="..\darknet\src\shortcut_layer.c" />
+    <ClCompile Include="..\darknet\src\softmax_layer.c" />
+    <ClCompile Include="..\darknet\src\super.c" />
+    <ClCompile Include="..\darknet\src\swag.c" />
+    <ClCompile Include="..\darknet\src\tag.c" />
+    <ClCompile Include="..\darknet\src\tree.c" />
+    <ClCompile Include="..\darknet\src\upsample_layer.c" />
+    <ClCompile Include="..\darknet\src\utils.c" />
+    <ClCompile Include="..\darknet\src\voxel.c" />
+    <ClCompile Include="..\darknet\src\writing.c" />
+    <ClCompile Include="..\darknet\src\yolo_layer.c" />
+    <ClCompile Include="..\src\darknet.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
