@@ -70,10 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)$(Configuration)\objs\</IntDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName).objs\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)$(Configuration)\objs\</IntDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName).objs\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +119,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -132,7 +138,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4305;4018;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>

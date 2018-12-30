@@ -54,4 +54,6 @@ dkms.conf
 # Visual Studio
 
 build/.vs
-build/*/objs
+build/Debug
+build/Release
+build/x64
