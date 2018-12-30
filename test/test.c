@@ -37,5 +37,6 @@ int main(int argc, char *argv[])
 	printf("\ntime: %.2fs\n\n", (clock() - c) * 1.0f / CLOCKS_PER_SEC);
 	print_detections(&dets);
 	darknet_detections_destroy(&dets);
+	darknet_detector_destroy(d);
 	return 0;
 }
