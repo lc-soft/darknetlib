@@ -87,24 +87,24 @@ static int convert_detections(const darknet_detector_t *d,
 	}
 	for (det = dets->list, i = 0; i < n; ++i, ++det) {
 		best_class = selected[i].best_class;
-		det->name = d->names[best_class];
+		det->best_name = d->names[best_class];
 		det->names_count = 0;
 		convert_box(&det->box, &selected[i].det.bbox);
 		for (j = 0; j < layer->classes; ++j) {
-			if (selected[i].det.prob[j] > d->thresh &&
-			    j != best_class) {
+			if (selected[i].det.prob[j] > d->thresh) {
 				++det->names_count;
 			}
 		}
 		det->names = malloc(sizeof(char *) * (det->names_count + 1));
-		if (det->names) {
+		det->prob = malloc(sizeof(float) * (det->names_count));
+		if (!det->names || !det->prob) {
 			return -ENOMEM;
 		}
 		for (j = 0, k = 0; j < layer->classes; ++j) {
-			if (selected[i].det.prob[j] > d->thresh &&
-			    j != best_class) {
-				++det->names_count;
-				det->names[k++] = d->names[j];
+			if (selected[i].det.prob[j] > d->thresh) {
+				det->names[k] = d->names[j];
+				det->prob[k] = selected[i].det.prob[j];
+				k++;
 			}
 		}
 		det->names[det->names_count] = NULL;
@@ -112,22 +112,27 @@ static int convert_detections(const darknet_detector_t *d,
 	return 0;
 }
 
-void darknet_detections_destroy(darknet_detections_t *d)
+void darknet_detections_destroy(darknet_detections_t *dets)
 {
 	size_t i;
+	darknet_detection_t *det;
 
-	for (i = 0; i < d->length; ++i) {
-		if (d->list[i].names) {
-			free(d->list[i].names);
+	for (i = 0; i < dets->length; ++i) {
+		det = &dets->list[i];
+		if (det->names) {
+			free(det->names);
 		}
-		d->list[i].name = NULL;
-		d->list[i].names = NULL;
+		if (det->prob) {
+			free(det->prob);
+		}
+		det->best_name = NULL;
+		det->names = NULL;
 	}
-	if (d->list) {
-		free(d->list);
+	if (dets->list) {
+		free(dets->list);
 	}
-	d->list = NULL;
-	d->length = 0;
+	dets->list = NULL;
+	dets->length = 0;
 }
 
 int darknet_detector_test(darknet_detector_t *d, const char *file,

@@ -19,6 +19,8 @@
 #define DARKNET_END_HEADER
 #endif
 
+#include <stdlib.h>
+
 DARKNET_BEGIN_HEADER
 
 typedef struct darknet_detector darknet_detector_t;
@@ -31,10 +33,11 @@ struct darknet_box {
 };
 
 struct darknet_detection {
-	const char *name;   /**< best name */
-	char **names;       /**< matched names */
-	size_t names_count; /**< count of matched names */
-	darknet_box_t box;  /**< box */
+	const char *best_name; /**< best name */
+	char **names;          /**< matched names */
+	float *prob;           /**< probability list */
+	size_t names_count;    /**< count of matched names */
+	darknet_box_t box;     /**< box */
 };
 
 struct darknet_detections {
