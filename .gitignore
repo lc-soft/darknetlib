@@ -57,3 +57,4 @@ build/.vs
 build/Debug
 build/Release
 build/x64
+3rdparty/

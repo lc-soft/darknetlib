@@ -87,13 +87,15 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(CUDNN)include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <MinimumRequiredVersion />
+      <AdditionalLibraryDirectories>$(CUDNN)\lib\$(Platform)\;$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,13 +104,15 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(CUDNN)include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <MinimumRequiredVersion />
+      <AdditionalLibraryDirectories>$(CUDNN)\lib\$(Platform)\;$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,15 +123,17 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4244;4305;</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(CUDNN)include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <MinimumRequiredVersion />
+      <AdditionalLibraryDirectories>$(CUDNN)\lib\$(Platform)\;$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,8 +144,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4244;4305;4018;</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(CUDNN)include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
       <PreprocessorDefinitions>_USING_V110_SDK71_;_CRT_SECURE_NO_WARNINGS;DARKNET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>build.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <CompileAs>CompileAsC</CompileAs>
@@ -148,11 +154,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <MinimumRequiredVersion />
+      <AdditionalLibraryDirectories>$(CUDNN)\lib\$(Platform)\;$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\darknet\src\unistd.h" />
-    <ClInclude Include="..\darknet\src\utils.h" />
     <ClInclude Include="..\include\darknet.h" />
     <ClInclude Include="..\src\build.h" />
   </ItemGroup>

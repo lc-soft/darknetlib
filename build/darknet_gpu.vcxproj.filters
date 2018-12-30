@@ -1,210 +1,242 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="src">
+      <UniqueIdentifier>{33cfe5d4-7a99-4807-8332-f4cd4c35883d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="include">
+      <UniqueIdentifier>{eb09d481-d176-40db-ae51-14c74330d2cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src\darknet">
+      <UniqueIdentifier>{17dbc645-0313-482f-aa40-ce6622e2ac69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\darknet">
-      <UniqueIdentifier>{5315b504-f477-4371-bb6d-eb2bf32fa527}</UniqueIdentifier>
+    <Filter Include="src\darknet\cu">
+      <UniqueIdentifier>{f971f3a8-b35c-4a86-85e9-c923e15b9403}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\build.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\darknet.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\darknet\src\utils.c">
-      <Filter>源文件\darknet</Filter>
+    <ClCompile Include="..\darknet\src\activations.c">
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\activation_layer.c">
-      <Filter>源文件\darknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\darknet\src\activations.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\art.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\avgpool_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\batchnorm_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\blas.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\box.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\captcha.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\cifar.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\classifier.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\col2im.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\compare.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\connected_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\convolutional_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\cost_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\cpu_gemm.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\crnn_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\crop_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\cuda.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\data.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\deconvolutional_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\detection_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\dice.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\dropout_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\gemm.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\getopt.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\gettimeofday.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\go.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\gru_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\im2col.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\image.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\list.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\local_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\matrix.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\maxpool_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\network.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\nightmare.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\normalization_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\option_list.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\parser.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\region_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\reorg_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\reorg_old_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\rnn.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\rnn_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\rnn_vid.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\route_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\shortcut_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\softmax_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\super.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\swag.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\tag.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\tree.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\upsample_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\darknet\src\utils.c">
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\voxel.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\writing.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\darknet\src\yolo_layer.c">
-      <Filter>源文件\darknet</Filter>
+      <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\src\darknet.c">
-      <Filter>源文件</Filter>
+      <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\darknet.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\build.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="..\darknet\src\activation_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\avgpool_layer_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\blas_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\col2im_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\convolutional_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\crop_layer_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\deconvolutional_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\dropout_layer_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\im2col_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\maxpool_layer_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="..\darknet\src\network_kernels.cu">
+      <Filter>src\darknet\cu</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\darknet\src\activations.c" />
+    <ClCompile Include="..\darknet\src\activation_layer.c" />
+    <ClCompile Include="..\darknet\src\art.c" />
+    <ClCompile Include="..\darknet\src\avgpool_layer.c" />
+    <ClCompile Include="..\darknet\src\batchnorm_layer.c" />
+    <ClCompile Include="..\darknet\src\blas.c" />
+    <ClCompile Include="..\darknet\src\box.c" />
+    <ClCompile Include="..\darknet\src\captcha.c" />
+    <ClCompile Include="..\darknet\src\cifar.c" />
+    <ClCompile Include="..\darknet\src\classifier.c" />
+    <ClCompile Include="..\darknet\src\col2im.c" />
+    <ClCompile Include="..\darknet\src\compare.c" />
+    <ClCompile Include="..\darknet\src\connected_layer.c" />
+    <ClCompile Include="..\darknet\src\convolutional_layer.c" />
+    <ClCompile Include="..\darknet\src\cost_layer.c" />
+    <ClCompile Include="..\darknet\src\cpu_gemm.c" />
+    <ClCompile Include="..\darknet\src\crnn_layer.c" />
+    <ClCompile Include="..\darknet\src\crop_layer.c" />
+    <ClCompile Include="..\darknet\src\cuda.c" />
+    <ClCompile Include="..\darknet\src\data.c" />
+    <ClCompile Include="..\darknet\src\deconvolutional_layer.c" />
+    <ClCompile Include="..\darknet\src\detection_layer.c" />
+    <ClCompile Include="..\darknet\src\dice.c" />
+    <ClCompile Include="..\darknet\src\dropout_layer.c" />
+    <ClCompile Include="..\darknet\src\gemm.c" />
+    <ClCompile Include="..\darknet\src\getopt.c" />
+    <ClCompile Include="..\darknet\src\gettimeofday.c" />
+    <ClCompile Include="..\darknet\src\go.c" />
+    <ClCompile Include="..\darknet\src\gru_layer.c" />
+    <ClCompile Include="..\darknet\src\im2col.c" />
+    <ClCompile Include="..\darknet\src\image.c" />
+    <ClCompile Include="..\darknet\src\layer.c" />
+    <ClCompile Include="..\darknet\src\list.c" />
+    <ClCompile Include="..\darknet\src\local_layer.c" />
+    <ClCompile Include="..\darknet\src\matrix.c" />
+    <ClCompile Include="..\darknet\src\maxpool_layer.c" />
+    <ClCompile Include="..\darknet\src\network.c" />
+    <ClCompile Include="..\darknet\src\nightmare.c" />
+    <ClCompile Include="..\darknet\src\normalization_layer.c" />
+    <ClCompile Include="..\darknet\src\option_list.c" />
+    <ClCompile Include="..\darknet\src\parser.c" />
+    <ClCompile Include="..\darknet\src\region_layer.c" />
+    <ClCompile Include="..\darknet\src\reorg_layer.c" />
+    <ClCompile Include="..\darknet\src\reorg_old_layer.c" />
+    <ClCompile Include="..\darknet\src\rnn.c" />
+    <ClCompile Include="..\darknet\src\rnn_layer.c" />
+    <ClCompile Include="..\darknet\src\rnn_vid.c" />
+    <ClCompile Include="..\darknet\src\route_layer.c" />
+    <ClCompile Include="..\darknet\src\shortcut_layer.c" />
+    <ClCompile Include="..\darknet\src\softmax_layer.c" />
+    <ClCompile Include="..\darknet\src\super.c" />
+    <ClCompile Include="..\darknet\src\swag.c" />
+    <ClCompile Include="..\darknet\src\tag.c" />
+    <ClCompile Include="..\darknet\src\tree.c" />
+    <ClCompile Include="..\darknet\src\upsample_layer.c" />
+    <ClCompile Include="..\darknet\src\utils.c" />
+    <ClCompile Include="..\darknet\src\voxel.c" />
+    <ClCompile Include="..\darknet\src\writing.c" />
+    <ClCompile Include="..\darknet\src\yolo_layer.c" />
+    <ClCompile Include="..\src\darknet.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\darknet.h" />
+    <ClInclude Include="..\src\build.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="..\darknet\src\activation_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\avgpool_layer_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\blas_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\col2im_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\convolutional_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\crop_layer_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\deconvolutional_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\dropout_layer_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\im2col_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\maxpool_layer_kernels.cu" />
+    <CudaCompile Include="..\darknet\src\network_kernels.cu" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}</ProjectGuid>
+    <RootNamespace>darknet_gpu</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <TargetName>darknet</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <TargetName>darknet</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>GPU;CUDNN;DARKNET_EXPORTS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
+      <ForcedIncludeFiles>build.h</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>curand.lib;cublas.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories);$(CudaToolkitLibDir)</AdditionalLibraryDirectories>
+    </Link>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <AdditionalDeps>
+      </AdditionalDeps>
+      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>GPU;CUDNN;DARKNET_EXPORTS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>build.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>curand.lib;cublas.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\3rdparty\cuda\lib\x64;%(AdditionalLibraryDirectories);$(CudaToolkitLibDir)</AdditionalLibraryDirectories>
+    </Link>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <AdditionalDeps>
+      </AdditionalDeps>
+      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.targets" />
+  </ImportGroup>
+</Project>

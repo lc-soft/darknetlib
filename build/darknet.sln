@@ -7,8 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "darknet", "darknet.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test.vcxproj", "{AF629853-81AC-4666-8BDB-61BA88A12F7A}"
 	ProjectSection(ProjectDependencies) = postProject
-		{1D84BC79-59DB-44B4-8DCB-763C612E851E} = {1D84BC79-59DB-44B4-8DCB-763C612E851E}
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A} = {5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "darknet_gpu", "darknet_gpu.vcxproj", "{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,13 @@ Global
 		{AF629853-81AC-4666-8BDB-61BA88A12F7A}.Release|x64.Build.0 = Release|x64
 		{AF629853-81AC-4666-8BDB-61BA88A12F7A}.Release|x86.ActiveCfg = Release|Win32
 		{AF629853-81AC-4666-8BDB-61BA88A12F7A}.Release|x86.Build.0 = Release|Win32
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Debug|x64.ActiveCfg = Debug|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Debug|x64.Build.0 = Debug|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Debug|x86.ActiveCfg = Debug|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Release|x64.ActiveCfg = Release|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Release|x64.Build.0 = Release|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Release|x86.ActiveCfg = Release|x64
+		{5AE5FF24-70E9-4E64-AC56-7F5B402F5F0A}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

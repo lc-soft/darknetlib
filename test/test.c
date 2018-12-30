@@ -11,7 +11,7 @@ void print_detections(const darknet_detections_t *dets)
 	printf("detections:\n");
 	for (i = 0; i < dets->length; ++i) {
 		det = &dets->list[i];
-		printf("[%lu] best name: %s, box: (%g, %g, %g, %g)\n", i,
+		printf("[%zu] best name: %s, box: (%g, %g, %g, %g)\n", i,
 		       det->best_name, det->box.x, det->box.y, det->box.w,
 		       det->box.h);
 		printf("names: \n");
