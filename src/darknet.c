@@ -7,6 +7,12 @@
 #include "../darknet/src/network.h"
 #include "../darknet/src/parser.h"
 
+#ifdef _WIN32
+#define PATH_SEP '\\'
+#else
+#define PATH_SEP '/'
+#endif
+
 int check_mistakes = 0;
 
 typedef image darknet_image;
@@ -14,38 +20,167 @@ typedef layer darknet_layer;
 typedef network darknet_network;
 typedef detection darknet_detection;
 
+struct darknet_config {
+	list *options;
+};
+
+struct darknet_network {
+	network net;
+};
+
 struct darknet_detector {
 	char **names;
 	float thresh;
 	float hier_thresh;
-	darknet_network net;
+	darknet_network_t *net;
 };
 
-darknet_detector_t *darnet_detector_create(const char *datacfg,
-					   const char *cfgfile,
-					   const char *weightfile)
+darknet_config_t *darknet_config_create(const char *file)
+{
+	darknet_config_t *cfg;
+
+	cfg = malloc(sizeof(darknet_config_t));
+	if (!cfg) {
+		return NULL;
+	}
+	cfg->options = read_data_cfg((char *)file);
+	return cfg;
+}
+
+void darknet_config_destroy(darknet_config_t *cfg)
+{
+	free_list_contents_kvp(cfg->options);
+	free_list(cfg->options);
+	free(cfg);
+}
+
+static int check_key_is_path(const char *key)
+{
+	size_t i;
+	const char *paths[6] = { "train",  "valid",  "names",
+				 "labels", "backup", "map" };
+	for (i = 0; i < 6; ++i) {
+		if (strcmp(paths[i], key) == 0) {
+			return 0;
+		}
+	}
+	return -1;
+}
+
+size_t darknet_config_set_workdir(darknet_config_t *cfg, const char *workdir)
+{
+	kvp *kv;
+	node *next;
+	char *key;
+	char *val;
+
+	size_t len;
+	size_t key_len;
+	size_t dir_len = strlen(workdir);
+	size_t count = 0;
+
+	for (next = cfg->options->front; next; next = next->next) {
+		kv = next->val;
+		if (check_key_is_path(kv->key) != 0) {
+			continue;
+		}
+		if (!kv->val || kv->val[0] == '/' || kv->val[0] == '\\') {
+			continue;
+		}
+		key = kv->key;
+		key_len = strlen(kv->key);
+		len = strlen(kv->val) + key_len + dir_len + 2;
+		val = malloc(sizeof(char) * (len + 1));
+		sprintf(val, "%s-%s%c%s", key, workdir, PATH_SEP, kv->val);
+		val[key_len] = 0;
+		val[len] = 0;
+		kv->key = val;
+		kv->val = val + key_len + 1;
+		free(key);
+		++count;
+	}
+	return count;
+}
+
+darknet_network_t *darknet_network_create(const char *cfgfile)
+{
+	darknet_network_t *net;
+
+	net = malloc(sizeof(darknet_network_t));
+	if (!net) {
+		return NULL;
+	}
+	net->net = parse_network_cfg_custom((char *)cfgfile, 1);
+	return net;
+}
+
+void darknet_network_destroy(darknet_network_t *net)
+{
+	free_network(net->net);
+	free(net);
+}
+
+void darknet_network_load_weights(darknet_network_t *net,
+				  const char *weightfile)
+{
+	load_weights(&net->net, (char *)weightfile);
+	fuse_conv_batchnorm(net->net);
+	calculate_binary_weights(net->net);
+}
+
+static list *get_paths(char *filename)
+{
+	char *path;
+	list *lines;
+	FILE *file = fopen(filename, "r");
+
+	if (!file) {
+		return NULL;
+	}
+	lines = make_list();
+	while ((path = fgetl(file))) {
+		list_insert(lines, path);
+	}
+	fclose(file);
+	return lines;
+}
+
+static char **get_labels_custom(char *filename, int *size)
+{
+	char **labels;
+	list *plist = get_paths(filename);
+
+	if (!plist) {
+		return NULL;
+	}
+	if (size) {
+		*size = plist->size;
+	}
+	labels = (char **)list_to_array(plist);
+	free_list(plist);
+	return labels;
+}
+
+darknet_detector_t *darnet_detector_create(darknet_network_t *net,
+					   darknet_config_t *cfg)
 {
 	darknet_detector_t *detector;
-	darknet_network net = parse_network_cfg_custom((char *)cfgfile, 1);
-	list *options = read_data_cfg((char *)datacfg);
+	list *options = cfg->options;
 
 	int names_size = 0;
 	char *names_file = option_find_str(options, "names", "data/names.list");
 	char **names = get_labels_custom(names_file, &names_size);
 
-	if (weightfile) {
-		load_weights(&net, (char *)weightfile);
+	if (!names) {
+		DEBUG_MSG("error: couldn't open file: %s\n", names_file);
+		return NULL;
 	}
-	fuse_conv_batchnorm(net);
-	calculate_binary_weights(net);
-	if (net.layers[net.n - 1].classes != names_size) {
+	if (net->net.layers[net->net.n - 1].classes != names_size) {
 		DEBUG_MSG("error: in the file %s number of names %d "
-			  "that isn't equal to classes=%d in the file %s \n",
-			  names_file, names_size, net.layers[net.n - 1].classes,
-			  cfgfile);
+			  "that isn't equal to classes=%d\n",
+			  names_file, names_size,
+			  net->net.layers[net->net.n - 1].classes);
 	}
-	free_list_contents_kvp(options);
-	free_list(options);
 
 	detector = malloc(sizeof(struct darknet_detector));
 	detector->net = net;
@@ -57,8 +192,7 @@ darknet_detector_t *darnet_detector_create(const char *datacfg,
 
 void darknet_detector_destroy(darknet_detector_t *d)
 {
-	free_ptrs(d->names, d->net.layers[d->net.n - 1].classes);
-	free_network(d->net);
+	free_ptrs(d->names, d->net->net.layers[d->net->net.n - 1].classes);
 }
 
 static void convert_box(darknet_box_t *dst, box *src)
@@ -143,7 +277,7 @@ int darknet_detector_test(darknet_detector_t *d, const char *file,
 	float nms = .45;
 
 	darknet_detection *dets;
-	darknet_network *net = &d->net;
+	darknet_network *net = &d->net->net;
 	darknet_image img = load_image((char *)file, 0, 0, net->c);
 	darknet_image sized_img = resize_image(img, net->w, net->h);
 	darknet_layer layer = net->layers[net->n - 1];

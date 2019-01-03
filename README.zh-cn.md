@@ -11,16 +11,25 @@
 
 int main(int argc, char *argv[])
 {
-    darknet_detector_t *d;
-    darknet_detections_t dets;
+	darknet_network_t *net;
+	darknet_detector_t *d;
+	darknet_config_t *cfg;
+	darknet_detections_t dets;
 
-    d = darnet_detector_create("coco.data", "yolov3.cfg", "yolov3.weights");
-    darknet_detector_test(d, "img/dog.jpg", &dets);
-    // 干其他事情
-    // ...
-    darknet_detections_destroy(&dets);
-    darknet_detector_destroy(d);
-    return 0;
+	cfg = darknet_config_create("cfg/coco.data");
+	net = darknet_network_create("cfg/yolov3.cfg");
+	darknet_network_load_weights(net, "yolov3.weights");
+	d = darnet_detector_create(net, cfg);
+	if (d) {
+		darknet_detector_test(d, "img/dog.jpg", &dets);
+		// 干其他事情
+		// ...
+		darknet_detections_destroy(&dets);
+		darknet_detector_destroy(d);
+	}
+	darknet_config_destroy(cfg);
+	darknet_network_destroy(net);
+	return 0;
 }
 ```
 
@@ -36,7 +45,7 @@ int main(int argc, char *argv[])
 
 1. 下载安装 [CUDA](https://developer.nvidia.com/cuda-downloads)
 1. 下载 [cuDNN](https://developer.nvidia.com/cudnn) 并解压到 `3rdparty` 目录
-1. 使用 Visual Studio 打开 `build/darknet.sh`
+1. 使用 Visual Studio 打开 `build/darknet.sln`
 1. 设置配置为 **Release** 和 **x64**
 1. 构建 darknet_gpu 和 test 项目
 

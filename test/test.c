@@ -25,18 +25,29 @@ void print_detections(const darknet_detections_t *dets)
 int main(int argc, char *argv[])
 {
 	clock_t c;
+	darknet_network_t *net;
 	darknet_detector_t *d;
+	darknet_config_t *cfg;
 	darknet_detections_t dets;
 
 	c = clock();
-	d = darnet_detector_create("cfg/coco.data", "cfg/yolov3.cfg",
-				   "yolov3.weights");
-	printf("\ntime: %.2fs\n\n", (clock() - c) * 1.0f / CLOCKS_PER_SEC);
-	c = clock();
-	darknet_detector_test(d, "img/dog.jpg", &dets);
-	printf("\ntime: %.2fs\n\n", (clock() - c) * 1.0f / CLOCKS_PER_SEC);
-	print_detections(&dets);
-	darknet_detections_destroy(&dets);
-	darknet_detector_destroy(d);
+	cfg = darknet_config_create("cfg/coco.data");
+	net = darknet_network_create("cfg/yolov3.cfg");
+	darknet_network_load_weights(net, "yolov3.weights");
+	darknet_config_set_workdir(cfg, "workdir/test/data");
+	d = darnet_detector_create(net, cfg);
+	if (d) {
+		printf("\ntime: %.2fs\n\n",
+		       (clock() - c) * 1.0f / CLOCKS_PER_SEC);
+		c = clock();
+		darknet_detector_test(d, "img/dog.jpg", &dets);
+		printf("\ntime: %.2fs\n\n",
+		       (clock() - c) * 1.0f / CLOCKS_PER_SEC);
+		print_detections(&dets);
+		darknet_detections_destroy(&dets);
+		darknet_detector_destroy(d);
+	}
+	darknet_config_destroy(cfg);
+	darknet_network_destroy(net);
 	return 0;
 }

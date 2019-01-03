@@ -9,8 +9,8 @@
 
 #define getenv
 
-#define DEBUG_MSG(format, ...)                                        \
-	printf(__FILE__ " %d: %s(): " format, __LINE__, __FUNCTION__, \
+#define DEBUG_MSG(format, ...)                                           \
+	printf("%s:%d: %s(): " format, __FILE__, __LINE__, __FUNCTION__, \
 	       ##__VA_ARGS__)
 
 #endif
