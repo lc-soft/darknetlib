@@ -13,4 +13,7 @@
 	printf("%s:%d: %s(): " format, __FILE__, __LINE__, __FUNCTION__, \
 	       ##__VA_ARGS__)
 
+#define DEBUG_ERROR(format, ...)                                  \
+	printf("%s:%d: %s(): error: " format, __FILE__, __LINE__, \
+	       __FUNCTION__, ##__VA_ARGS__)
 #endif

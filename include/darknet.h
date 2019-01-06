@@ -29,6 +29,7 @@ typedef struct darknet_detection darknet_detection_t;
 typedef struct darknet_detections darknet_detections_t;
 typedef struct darknet_box darknet_box_t;
 typedef struct darknet_config darknet_config_t;
+typedef struct darknet_dataconfig darknet_dataconfig_t;
 
 struct darknet_box {
 	float x, y, w, h;
@@ -50,6 +51,7 @@ struct darknet_detections {
 DARKNET_API void darknet_detections_destroy(darknet_detections_t *d);
 DARKNET_API void darknet_detector_destroy(darknet_detector_t *d);
 DARKNET_API void darknet_network_destroy(darknet_network_t *net);
+DARKNET_API void darknet_dataconfig_destroy(darknet_dataconfig_t *cfg);
 DARKNET_API void darknet_config_destroy(darknet_config_t *cfg);
 
 DARKNET_API darknet_config_t *darknet_config_create(const char *file);
@@ -57,13 +59,18 @@ DARKNET_API darknet_config_t *darknet_config_create(const char *file);
 DARKNET_API size_t darknet_config_set_workdir(darknet_config_t *cfg,
 					      const char *workdir);
 
-DARKNET_API darknet_network_t *darknet_network_create(const char *cfgfile);
+DARKNET_API darknet_dataconfig_t *darknet_dataconfig_create(const char *file);
 
-DARKNET_API void darknet_network_load_weights(darknet_network_t *net,
-					      const char *weightfile);
+DARKNET_API size_t darknet_dataconfig_set_workdir(darknet_dataconfig_t *cfg,
+						  const char *workdir);
 
-DARKNET_API darknet_detector_t *darnet_detector_create(darknet_network_t *net,
-						       darknet_config_t *cfg);
+DARKNET_API darknet_network_t *darknet_network_create(darknet_config_t *cfg);
+
+DARKNET_API int darknet_network_load_weights(darknet_network_t *net,
+					     const char *weightfile);
+
+DARKNET_API darknet_detector_t *darnet_detector_create(
+    darknet_network_t *net, darknet_dataconfig_t *cfg);
 
 DARKNET_API int darknet_detector_test(darknet_detector_t *d, const char *file,
 				      darknet_detections_t *results);

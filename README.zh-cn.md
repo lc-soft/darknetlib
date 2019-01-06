@@ -14,11 +14,14 @@ int main(int argc, char *argv[])
 	darknet_network_t *net;
 	darknet_detector_t *d;
 	darknet_config_t *cfg;
+	darknet_dataconfig_t *datacfg;
 	darknet_detections_t dets;
 
-	cfg = darknet_config_create("cfg/coco.data");
-	net = darknet_network_create("cfg/yolov3.cfg");
+    cfg = darknet_config_create("cfg/yolov3.cfg");
+	datacfg = darknet_dataconfig_create("cfg/coco.data");
+	net = darknet_network_create(cfg);
 	darknet_network_load_weights(net, "yolov3.weights");
+	d = darnet_detector_create(net, datacfg);
 	d = darnet_detector_create(net, cfg);
 	if (d) {
 		darknet_detector_test(d, "img/dog.jpg", &dets);

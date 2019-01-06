@@ -54,7 +54,6 @@ dkms.conf
 # Visual Studio
 
 build/.vs
-build/Debug
-build/Release
-build/x64
+build/x86-*
+build/x64-*
 3rdparty/

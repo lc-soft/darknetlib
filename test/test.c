@@ -28,14 +28,15 @@ int main(int argc, char *argv[])
 	darknet_network_t *net;
 	darknet_detector_t *d;
 	darknet_config_t *cfg;
+	darknet_dataconfig_t *datacfg;
 	darknet_detections_t dets;
 
 	c = clock();
-	cfg = darknet_config_create("cfg/coco.data");
-	net = darknet_network_create("cfg/yolov3.cfg");
+	cfg = darknet_config_create("cfg/yolov3.cfg");
+	datacfg = darknet_dataconfig_create("cfg/coco.data");
+	net = darknet_network_create(cfg);
 	darknet_network_load_weights(net, "yolov3.weights");
-	darknet_config_set_workdir(cfg, "workdir/test/data");
-	d = darnet_detector_create(net, cfg);
+	d = darnet_detector_create(net, datacfg);
 	if (d) {
 		printf("\ntime: %.2fs\n\n",
 		       (clock() - c) * 1.0f / CLOCKS_PER_SEC);
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
 		darknet_detector_destroy(d);
 	}
 	darknet_config_destroy(cfg);
+	darknet_dataconfig_destroy(datacfg);
 	darknet_network_destroy(net);
 	return 0;
 }

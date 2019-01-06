@@ -51,7 +51,6 @@
     <ClCompile Include="..\darknet\src\nightmare.c" />
     <ClCompile Include="..\darknet\src\normalization_layer.c" />
     <ClCompile Include="..\darknet\src\option_list.c" />
-    <ClCompile Include="..\darknet\src\parser.c" />
     <ClCompile Include="..\darknet\src\region_layer.c" />
     <ClCompile Include="..\darknet\src\reorg_layer.c" />
     <ClCompile Include="..\darknet\src\reorg_old_layer.c" />
@@ -121,12 +120,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
     <TargetName>darknet</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
     <TargetName>darknet</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -135,9 +135,6 @@
     <ClCompile Include="..\darknet\src\option_list.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\darknet\src\parser.c">
-      <Filter>src\darknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\darknet\src\region_layer.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
