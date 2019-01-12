@@ -69,9 +69,6 @@
     <ClCompile Include="..\darknet\src\crop_layer.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\darknet\src\cuda.c">
-      <Filter>src\darknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\darknet\src\data.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
@@ -177,9 +174,6 @@
     <ClCompile Include="..\darknet\src\upsample_layer.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\darknet\src\utils.c">
-      <Filter>src\darknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\darknet\src\voxel.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
@@ -190,6 +184,15 @@
       <Filter>src\darknet</Filter>
     </ClCompile>
     <ClCompile Include="..\src\darknet.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cuda.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\error.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,12 +2,12 @@
 #define DARKNET_H
 
 #if defined(__GNUC__)
-#define DARKNET_API
+#define DARKNET_API extern
 #else
 #ifdef DARKNET_EXPORTS
 #define DARKNET_API __declspec(dllexport)
 #else
-#define DARKNET_API
+#define DARKNET_API __declspec(dllimport)
 #endif
 #endif
 
@@ -20,6 +20,7 @@
 #endif
 
 #include <stdlib.h>
+#include <setjmp.h>
 
 DARKNET_BEGIN_HEADER
 
@@ -48,6 +49,42 @@ struct darknet_detections {
 	size_t length;
 };
 
+typedef enum darknet_error {
+	DARKNET_ERROR = 1,
+	DARKNET_IO_ERROR,
+	DARKNET_DETECTOR_ERROR,
+	DARKNET_CUDA_ERROR
+} darknet_error_t;
+
+DARKNET_API jmp_buf darknet_jmp_buf;
+DARKNET_API int darknet_jmp_buf_valid;
+DARKNET_API darknet_error_t darknet_last_error;
+
+// clang-format off
+
+#define darknet_try \
+	do {\
+		darknet_jmp_buf_valid = 1;\
+		if (!setjmp(darknet_jmp_buf)) {
+#define darknet_catch(ERR) \
+		} else {\
+			darknet_error_t ERR = darknet_last_error;
+#define darknet_etry \
+		}\
+		darknet_jmp_buf_valid = 0;\
+	} while(0)
+#define darknet_throw(err, errmsg, ...) \
+	darknet_set_error(err, errmsg, ##__VA_ARGS__);\
+	if (darknet_jmp_buf_valid) {\
+		longjmp(darknet_jmp_buf, err);\
+	}
+
+// clang-format on
+
+DARKNET_API void darknet_set_error(darknet_error_t err, const char *format,
+				   ...);
+DARKNET_API const char *darknet_get_error_string(darknet_error_t err);
+
 DARKNET_API void darknet_detections_destroy(darknet_detections_t *d);
 DARKNET_API void darknet_detector_destroy(darknet_detector_t *d);
 DARKNET_API void darknet_network_destroy(darknet_network_t *net);
@@ -69,7 +106,7 @@ DARKNET_API darknet_network_t *darknet_network_create(darknet_config_t *cfg);
 DARKNET_API int darknet_network_load_weights(darknet_network_t *net,
 					     const char *weightfile);
 
-DARKNET_API darknet_detector_t *darnet_detector_create(
+DARKNET_API darknet_detector_t *darknet_detector_create(
     darknet_network_t *net, darknet_dataconfig_t *cfg);
 
 DARKNET_API int darknet_detector_test(darknet_detector_t *d, const char *file,

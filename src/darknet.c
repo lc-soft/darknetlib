@@ -104,6 +104,9 @@ void darknet_config_destroy(darknet_config_t *cfg)
 {
 	node *next;
 
+	if (!cfg) {
+		return;
+	}
 	for (next = cfg->sections->front; next; next = next->next) {
 		free_section(next->val);
 	}
@@ -125,6 +128,9 @@ darknet_dataconfig_t *darknet_dataconfig_create(const char *file)
 
 void darknet_dataconfig_destroy(darknet_dataconfig_t *cfg)
 {
+	if (!cfg) {
+		return;
+	}
 	free_list_contents_kvp(cfg->options);
 	free_list(cfg->options);
 	free(cfg);
@@ -443,12 +449,14 @@ darknet_network_t *darknet_network_create(darknet_config_t *cfg)
 
 void darknet_network_destroy(darknet_network_t *net)
 {
+	if (!net) {
+		return;
+	}
 	free_network(net->net);
 	free(net);
 }
 
-int darknet_network_load_weights(darknet_network_t *net,
-				  const char *weightfile)
+int darknet_network_load_weights(darknet_network_t *net, const char *weightfile)
 {
 	int ret;
 
@@ -461,41 +469,8 @@ int darknet_network_load_weights(darknet_network_t *net,
 	return 0;
 }
 
-static list *get_paths(char *filename)
-{
-	char *path;
-	list *lines;
-	FILE *file = fopen(filename, "r");
-
-	if (!file) {
-		return NULL;
-	}
-	lines = make_list();
-	while ((path = fgetl(file))) {
-		list_insert(lines, path);
-	}
-	fclose(file);
-	return lines;
-}
-
-static char **get_labels_custom(char *filename, int *size)
-{
-	char **labels;
-	list *plist = get_paths(filename);
-
-	if (!plist) {
-		return NULL;
-	}
-	if (size) {
-		*size = plist->size;
-	}
-	labels = (char **)list_to_array(plist);
-	free_list(plist);
-	return labels;
-}
-
-darknet_detector_t *darnet_detector_create(darknet_network_t *net,
-					   darknet_dataconfig_t *cfg)
+darknet_detector_t *darknet_detector_create(darknet_network_t *net,
+					    darknet_dataconfig_t *cfg)
 {
 	darknet_detector_t *detector;
 	list *options = cfg->options;
@@ -504,15 +479,12 @@ darknet_detector_t *darnet_detector_create(darknet_network_t *net,
 	char *names_file = option_find_str(options, "names", "data/names.list");
 	char **names = get_labels_custom(names_file, &names_size);
 
-	if (!names) {
-		DEBUG_MSG("error: couldn't open file: %s\n", names_file);
-		return NULL;
-	}
 	if (net->net.layers[net->net.n - 1].classes != names_size) {
-		DEBUG_MSG("error: in the file %s number of names %d "
-			  "that isn't equal to classes=%d\n",
-			  names_file, names_size,
-			  net->net.layers[net->net.n - 1].classes);
+		darknet_throw(DARKNET_DETECTOR_ERROR,
+			      "in the file %s number of names %d "
+			      "that isn't equal to classes=%d\n",
+			      names_file, names_size,
+			      net->net.layers[net->net.n - 1].classes);
 	}
 
 	detector = malloc(sizeof(struct darknet_detector));
@@ -525,6 +497,9 @@ darknet_detector_t *darnet_detector_create(darknet_network_t *net,
 
 void darknet_detector_destroy(darknet_detector_t *d)
 {
+	if (!d) {
+		return;
+	}
 	free_ptrs(d->names, d->net->net.layers[d->net->net.n - 1].classes);
 }
 

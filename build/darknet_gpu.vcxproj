@@ -29,7 +29,6 @@
     <ClCompile Include="..\darknet\src\cpu_gemm.c" />
     <ClCompile Include="..\darknet\src\crnn_layer.c" />
     <ClCompile Include="..\darknet\src\crop_layer.c" />
-    <ClCompile Include="..\darknet\src\cuda.c" />
     <ClCompile Include="..\darknet\src\data.c" />
     <ClCompile Include="..\darknet\src\deconvolutional_layer.c" />
     <ClCompile Include="..\darknet\src\detection_layer.c" />
@@ -65,11 +64,13 @@
     <ClCompile Include="..\darknet\src\tag.c" />
     <ClCompile Include="..\darknet\src\tree.c" />
     <ClCompile Include="..\darknet\src\upsample_layer.c" />
-    <ClCompile Include="..\darknet\src\utils.c" />
     <ClCompile Include="..\darknet\src\voxel.c" />
     <ClCompile Include="..\darknet\src\writing.c" />
     <ClCompile Include="..\darknet\src\yolo_layer.c" />
+    <ClCompile Include="..\src\cuda.c" />
     <ClCompile Include="..\src\darknet.c" />
+    <ClCompile Include="..\src\error.c" />
+    <ClCompile Include="..\src\utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\darknet.h" />
