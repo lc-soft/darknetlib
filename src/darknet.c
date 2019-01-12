@@ -88,7 +88,7 @@ static size_t set_options_workdir(list *options, const char *workdir)
 	return count;
 }
 
-darknet_config_t *darknet_config_create(const char *file)
+darknet_config_t *darknet_config_load(const char *file)
 {
 	darknet_config_t *cfg;
 
@@ -114,7 +114,7 @@ void darknet_config_destroy(darknet_config_t *cfg)
 	free(cfg);
 }
 
-darknet_dataconfig_t *darknet_dataconfig_create(const char *file)
+darknet_dataconfig_t *darknet_dataconfig_load(const char *file)
 {
 	darknet_dataconfig_t *cfg;
 

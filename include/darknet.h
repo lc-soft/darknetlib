@@ -91,12 +91,12 @@ DARKNET_API void darknet_network_destroy(darknet_network_t *net);
 DARKNET_API void darknet_dataconfig_destroy(darknet_dataconfig_t *cfg);
 DARKNET_API void darknet_config_destroy(darknet_config_t *cfg);
 
-DARKNET_API darknet_config_t *darknet_config_create(const char *file);
+DARKNET_API darknet_config_t *darknet_config_load(const char *file);
 
 DARKNET_API size_t darknet_config_set_workdir(darknet_config_t *cfg,
 					      const char *workdir);
 
-DARKNET_API darknet_dataconfig_t *darknet_dataconfig_create(const char *file);
+DARKNET_API darknet_dataconfig_t *darknet_dataconfig_load(const char *file);
 
 DARKNET_API size_t darknet_dataconfig_set_workdir(darknet_dataconfig_t *cfg,
 						  const char *workdir);

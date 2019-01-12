@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
 	c = clock();
 	darknet_try
 	{
-		cfg = darknet_config_create("cfg/yolov3.cfg");
-		datacfg = darknet_dataconfig_create("cfg/cocos.data");
+		cfg = darknet_config_load("cfg/yolov3.cfg");
+		datacfg = darknet_dataconfig_load("cfg/cocos.data");
 
 		net = darknet_network_create(cfg);
 		darknet_network_load_weights(net, "yolov3.weights");
