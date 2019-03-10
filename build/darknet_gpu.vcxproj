@@ -44,6 +44,7 @@
     <ClCompile Include="..\darknet\src\layer.c" />
     <ClCompile Include="..\darknet\src\list.c" />
     <ClCompile Include="..\darknet\src\local_layer.c" />
+    <ClCompile Include="..\darknet\src\lstm_layer.c" />
     <ClCompile Include="..\darknet\src\matrix.c" />
     <ClCompile Include="..\darknet\src\maxpool_layer.c" />
     <ClCompile Include="..\darknet\src\network.c" />
@@ -73,6 +74,54 @@
     <ClCompile Include="..\src\utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\darknet\src\activations.h" />
+    <ClInclude Include="..\darknet\src\activation_layer.h" />
+    <ClInclude Include="..\darknet\src\avgpool_layer.h" />
+    <ClInclude Include="..\darknet\src\batchnorm_layer.h" />
+    <ClInclude Include="..\darknet\src\blas.h" />
+    <ClInclude Include="..\darknet\src\box.h" />
+    <ClInclude Include="..\darknet\src\classifier.h" />
+    <ClInclude Include="..\darknet\src\col2im.h" />
+    <ClInclude Include="..\darknet\src\connected_layer.h" />
+    <ClInclude Include="..\darknet\src\convolutional_layer.h" />
+    <ClInclude Include="..\darknet\src\cost_layer.h" />
+    <ClInclude Include="..\darknet\src\crnn_layer.h" />
+    <ClInclude Include="..\darknet\src\crop_layer.h" />
+    <ClInclude Include="..\darknet\src\cuda.h" />
+    <ClInclude Include="..\darknet\src\darkunistd.h" />
+    <ClInclude Include="..\darknet\src\data.h" />
+    <ClInclude Include="..\darknet\src\deconvolutional_layer.h" />
+    <ClInclude Include="..\darknet\src\detection_layer.h" />
+    <ClInclude Include="..\darknet\src\dropout_layer.h" />
+    <ClInclude Include="..\darknet\src\gemm.h" />
+    <ClInclude Include="..\darknet\src\getopt.h" />
+    <ClInclude Include="..\darknet\src\gettimeofday.h" />
+    <ClInclude Include="..\darknet\src\gru_layer.h" />
+    <ClInclude Include="..\darknet\src\im2col.h" />
+    <ClInclude Include="..\darknet\src\image.h" />
+    <ClInclude Include="..\darknet\src\layer.h" />
+    <ClInclude Include="..\darknet\src\list.h" />
+    <ClInclude Include="..\darknet\src\local_layer.h" />
+    <ClInclude Include="..\darknet\src\lstm_layer.h" />
+    <ClInclude Include="..\darknet\src\matrix.h" />
+    <ClInclude Include="..\darknet\src\maxpool_layer.h" />
+    <ClInclude Include="..\darknet\src\network.h" />
+    <ClInclude Include="..\darknet\src\normalization_layer.h" />
+    <ClInclude Include="..\darknet\src\option_list.h" />
+    <ClInclude Include="..\darknet\src\parser.h" />
+    <ClInclude Include="..\darknet\src\region_layer.h" />
+    <ClInclude Include="..\darknet\src\reorg_layer.h" />
+    <ClInclude Include="..\darknet\src\reorg_old_layer.h" />
+    <ClInclude Include="..\darknet\src\rnn_layer.h" />
+    <ClInclude Include="..\darknet\src\route_layer.h" />
+    <ClInclude Include="..\darknet\src\shortcut_layer.h" />
+    <ClInclude Include="..\darknet\src\softmax_layer.h" />
+    <ClInclude Include="..\darknet\src\stb_image.h" />
+    <ClInclude Include="..\darknet\src\stb_image_write.h" />
+    <ClInclude Include="..\darknet\src\tree.h" />
+    <ClInclude Include="..\darknet\src\upsample_layer.h" />
+    <ClInclude Include="..\darknet\src\utils.h" />
+    <ClInclude Include="..\darknet\src\yolo_layer.h" />
     <ClInclude Include="..\include\darknet.h" />
     <ClInclude Include="..\src\build.h" />
   </ItemGroup>
@@ -121,21 +170,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName)\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
     <TargetName>darknet</TargetName>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\$(PlatformTarget)-windows\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName)\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
     <TargetName>darknet</TargetName>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(ProjectName)\$(PlatformTarget)-windows\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GPU;CUDNN;DARKNET_EXPORTS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
       <ForcedIncludeFiles>build.h</ForcedIncludeFiles>
     </ClCompile>
@@ -149,8 +198,12 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <AdditionalDeps>
       </AdditionalDeps>
-      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+      <AdditionalCompilerOptions> /wd"4819" </AdditionalCompilerOptions>
     </CudaCompile>
+    <PostBuildEvent>
+      <Command>copy $(OutDir)darknet.* $(SolutionDir)..\bin\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -159,7 +212,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>GPU;CUDNN;DARKNET_EXPORTS;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\;$(ProjectDir)..\3rdparty\cuda\include\;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>build.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4244;4305;4018;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -175,8 +228,12 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <AdditionalDeps>
       </AdditionalDeps>
-      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\include\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+      <Include>$(ProjectDir)..\src\;$(ProjectDir)..\darknet\src\;$(ProjectDir)..\darknet\include\</Include>
+      <AdditionalCompilerOptions> /wd"4819" </AdditionalCompilerOptions>
     </CudaCompile>
+    <PostBuildEvent>
+      <Command>copy $(OutDir)darknet.* $(SolutionDir)..\bin\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

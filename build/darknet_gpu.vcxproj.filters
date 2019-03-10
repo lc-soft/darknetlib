@@ -195,6 +195,9 @@
     <ClCompile Include="..\src\utils.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\darknet\src\lstm_layer.c">
+      <Filter>src\darknet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\darknet.h">
@@ -202,6 +205,150 @@
     </ClInclude>
     <ClInclude Include="..\src\build.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\activation_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\activations.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\avgpool_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\batchnorm_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\blas.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\box.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\classifier.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\col2im.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\connected_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\convolutional_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\cost_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\crnn_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\crop_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\cuda.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\darkunistd.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\data.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\deconvolutional_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\detection_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\dropout_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\gemm.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\getopt.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\gettimeofday.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\gru_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\im2col.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\image.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\list.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\local_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\lstm_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\matrix.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\maxpool_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\network.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\normalization_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\option_list.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\parser.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\region_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\reorg_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\reorg_old_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\rnn_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\route_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\shortcut_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\softmax_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\stb_image.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\stb_image_write.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\tree.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\upsample_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\yolo_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\utils.h">
+      <Filter>src\darknet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

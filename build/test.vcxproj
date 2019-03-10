@@ -75,23 +75,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName).objs\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName).objs\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName).objs\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\$(ProjectName).objs\</IntDir>
-    <OutDir>$(SolutionDir)$(PlatformTarget)-windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\$(ProjectName).objs\$(PlatformTarget)-windows\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,6 +109,9 @@
       <AdditionalDependencies>darknet.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)..\3rdparty\cuda\bin\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -150,6 +153,9 @@
       <AdditionalDependencies>darknet.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)..\3rdparty\cuda\bin\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
