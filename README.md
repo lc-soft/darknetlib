@@ -6,9 +6,9 @@ C bindings for [darknet](http://pjreddie.com/darknet/).
 
 ## Features
 
-- Support for get training progress while training the detector
-- Support for compiling into dynamic library
+- Provides simple exception handling
 - Redefining the interface with a new naming style
+- Suitable for compilation into a dynamic library to use
 
 ## Build
 
