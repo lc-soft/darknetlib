@@ -1,12 +1,14 @@
 #include <errno.h>
 #include "build.h"
 #include "darknet.h"
+#include "../darknet/include/darknet.h"
 #include "../darknet/src/list.h"
 #include "../darknet/src/utils.h"
 #include "../darknet/src/option_list.h"
 #include "../darknet/src/network.h"
 #include "../darknet/src/parser.h"
 #include "../darknet/src/parser.c"
+#include "../include/darknet.h"
 
 #ifdef _WIN32
 #define PATH_SEP '\\'
@@ -27,10 +29,13 @@ struct darknet_config {
 
 struct darknet_dataconfig {
 	list *options;
+	char *name;
 };
 
 struct darknet_network {
+	char *file;
 	network net;
+	darknet_config_t *cfg;
 };
 
 struct darknet_detector {
@@ -38,6 +43,7 @@ struct darknet_detector {
 	float thresh;
 	float hier_thresh;
 	darknet_network_t *net;
+	darknet_dataconfig_t *datacfg;
 };
 
 static int check_key_is_path(const char *key)
@@ -123,7 +129,13 @@ darknet_dataconfig_t *darknet_dataconfig_load(const char *file)
 		return NULL;
 	}
 	cfg->options = read_data_cfg((char *)file);
+	cfg->name = basecfg((char *)file);
 	return cfg;
+}
+
+int darknet_dataconfig_get_classes(darknet_dataconfig_t *cfg)
+{
+	return option_find_int_quiet(cfg->options, "classes", 0);
 }
 
 void darknet_dataconfig_destroy(darknet_dataconfig_t *cfg)
@@ -133,6 +145,7 @@ void darknet_dataconfig_destroy(darknet_dataconfig_t *cfg)
 	}
 	free_list_contents_kvp(cfg->options);
 	free_list(cfg->options);
+	free(cfg->name);
 	free(cfg);
 }
 
@@ -247,7 +260,7 @@ static int load_weights_file(network *net, const char *filename)
 	return 0;
 }
 
-// copy from darknet\src\parser.c:710
+// Modified from darknet\src\parser.c:710
 static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 {
 	section *s;
@@ -275,9 +288,10 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 	params.w = net.w;
 	params.c = net.c;
 	params.inputs = net.inputs;
-	if (batch > 0) {
+	if (batch > 0)
 		net.batch = batch;
-	}
+	if (net.batch < net.time_steps)
+		net.batch = net.time_steps;
 	params.batch = net.batch;
 	params.time_steps = net.time_steps;
 	params.net = net;
@@ -289,17 +303,15 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 	size_t workspace_size = 0;
 
 	n = n->next;
-	printf("layer     filters    size              input          "
-	       "      output\n");
+	fprintf(stderr, "layer     filters    size              input          "
+			"      output\n");
 	while (n) {
-		layer l = { 0 };
-		LAYER_TYPE lt;
-		s = (section *)n->val;
-
-		lt = string_to_layer_type(s->type);
 		params.index = count;
-		printf("%4d ", count);
+		fprintf(stderr, "%4d ", count);
+		s = (section *)n->val;
 		options = s->options;
+		layer l = { (LAYER_TYPE)0 };
+		LAYER_TYPE lt = string_to_layer_type(s->type);
 		if (lt == CONVOLUTIONAL) {
 			l = parse_convolutional(options, params);
 		} else if (lt == LOCAL) {
@@ -310,6 +322,8 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 			l = parse_rnn(options, params);
 		} else if (lt == GRU) {
 			l = parse_gru(options, params);
+		} else if (lt == LSTM) {
+			l = parse_lstm(options, params);
 		} else if (lt == CRNN) {
 			l = parse_crnn(options, params);
 		} else if (lt == CONNECTED) {
@@ -341,10 +355,16 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 			l = parse_avgpool(options, params);
 		} else if (lt == ROUTE) {
 			l = parse_route(options, params, net);
+			int k;
+			for (k = 0; k < l.n; ++k)
+				net.layers[l.input_layers[k]].use_bin_output =
+				    0;
 		} else if (lt == UPSAMPLE) {
 			l = parse_upsample(options, params, net);
 		} else if (lt == SHORTCUT) {
 			l = parse_shortcut(options, params, net);
+			net.layers[count - 1].use_bin_output = 0;
+			net.layers[l.index].use_bin_output = 0;
 		} else if (lt == DROPOUT) {
 			l = parse_dropout(options, params);
 			l.output = net.layers[count - 1].output;
@@ -363,6 +383,8 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 		l.dontload = option_find_int_quiet(options, "dontload", 0);
 		l.dontloadscales =
 		    option_find_int_quiet(options, "dontloadscales", 0);
+		l.learning_rate_scale =
+		    option_find_float_quiet(options, "learning_rate", 1);
 		option_unused(options);
 		net.layers[count] = l;
 		if (l.workspace_size > workspace_size) {
@@ -382,51 +404,65 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 			params.c = l.out_c;
 			params.inputs = l.outputs;
 		}
-		if (l.bflops > 0) {
+		if (l.bflops > 0)
 			bflops += l.bflops;
-		}
 	}
 	net.outputs = get_network_output_size(net);
 	net.output = get_network_output(net);
-	printf("Total BFLOPS %5.3f \n", bflops);
-	if (workspace_size) {
-		// printf("%ld\n", workspace_size);
+	fprintf(stderr, "Total BFLOPS %5.3f \n", bflops);
 #ifdef GPU
-		if (gpu_index >= 0) {
+	get_cuda_stream();
+	get_cuda_memcpy_stream();
+	if (gpu_index >= 0) {
+		int size = get_network_input_size(net) * net.batch;
+		net.input_state_gpu = cuda_make_array(0, size);
+		if (cudaSuccess == cudaHostAlloc(&net.input_pinned_cpu,
+						 size * sizeof(float),
+						 cudaHostRegisterMapped))
+			net.input_pinned_cpu_flag = 1;
+		else {
+			cudaGetLastError();    // reset CUDA-error
+			net.input_pinned_cpu =
+			    (float *)calloc(size, sizeof(float));
+		}
+
+		// pre-allocate memory for inference on Tensor Cores (fp16)
+		if (net.cudnn_half) {
+			*net.max_input16_size = max_inputs;
+			CHECK_CUDA(
+			    cudaMalloc((void **)net.input16_gpu,
+				       *net.max_input16_size *
+					   sizeof(short)));    // sizeof(half)
+			*net.max_output16_size = max_outputs;
+			CHECK_CUDA(
+			    cudaMalloc((void **)net.output16_gpu,
+				       *net.max_output16_size *
+					   sizeof(short)));    // sizeof(half)
+		}
+		if (workspace_size) {
+			fprintf(
+			    stderr,
+			    " Allocate additional workspace_size = %1.2f MB \n",
+			    (float)workspace_size / 1000000);
 			net.workspace = cuda_make_array(
 			    0, workspace_size / sizeof(float) + 1);
-			int size = get_network_input_size(net) * net.batch;
-			net.input_state_gpu = cuda_make_array(0, size);
-
-			// pre-allocate memory for inference on Tensor Cores
-			// (fp16)
-			if (net.cudnn_half) {
-				*net.max_input16_size = max_inputs;
-				check_error(cudaMalloc(
-				    (void **)net.input16_gpu,
-				    *net.max_input16_size *
-					sizeof(short)));    // sizeof(half)
-				*net.max_output16_size = max_outputs;
-				check_error(cudaMalloc(
-				    (void **)net.output16_gpu,
-				    *net.max_output16_size *
-					sizeof(short)));    // sizeof(half)
-			}
 		} else {
-			net.workspace = calloc(1, workspace_size);
+			net.workspace = (float *)calloc(1, workspace_size);
 		}
-#else
-		net.workspace = calloc(1, workspace_size);
-#endif
 	}
+#else
+	if (workspace_size) {
+		net.workspace = (float *)calloc(1, workspace_size);
+	}
+#endif
+
 	LAYER_TYPE lt = net.layers[net.n - 1].type;
 	if ((net.w % 32 != 0 || net.h % 32 != 0) &&
 	    (lt == YOLO || lt == REGION || lt == DETECTION)) {
-		DEBUG_MSG(
-		    "\n Warning: width=%d and height=%d in cfg-file must be "
-		    "divisible by 32 for default networks Yolo v1/v2/v3!!! "
-		    "\n\n",
-		    net.w, net.h);
+		printf("\n Warning: width=%d and height=%d in cfg-file must be "
+		       "divisible by 32 for default networks Yolo v1/v2/v3!!! "
+		       "\n\n",
+		       net.w, net.h);
 	}
 	*out_net = net;
 	return 0;
@@ -440,6 +476,7 @@ darknet_network_t *darknet_network_create(darknet_config_t *cfg)
 	if (!net) {
 		return NULL;
 	}
+	net->cfg = cfg;
 	if (init_network(&net->net, cfg, 1) == 0) {
 		return net;
 	}
@@ -464,6 +501,8 @@ int darknet_network_load_weights(darknet_network_t *net, const char *weightfile)
 	if (ret != 0) {
 		return ret;
 	}
+	net->file = malloc(sizeof(char) * (strlen(weightfile) + 1));
+	strcpy(net->file, weightfile);
 	fuse_conv_batchnorm(net->net);
 	calculate_binary_weights(net->net);
 	return 0;
@@ -492,6 +531,7 @@ darknet_detector_t *darknet_detector_create(darknet_network_t *net,
 	detector->thresh = 0.24;
 	detector->hier_thresh = 0.5;
 	detector->names = names;
+	detector->datacfg = cfg;
 	return detector;
 }
 
@@ -516,41 +556,51 @@ static int convert_detections(const darknet_detector_t *d,
 			      darknet_detection *raw_dets, int n_dets,
 			      darknet_detections_t *dets)
 {
-	int i, j, k, n, best_class;
+	int i, j, k, best_class;
 
 	darknet_detection_t *det;
-	detection_with_class *selected;
 
-	selected = get_actual_detections(raw_dets, n_dets, d->thresh, &n);
-	dets->list = calloc(n, sizeof(darknet_detection_t));
-	dets->length = n;
+	dets->list = calloc(n_dets, sizeof(darknet_detection_t));
+	dets->length = n_dets;
 	if (!dets->list) {
 		return -ENOMEM;
 	}
-	for (det = dets->list, i = 0; i < n; ++i, ++det) {
-		best_class = selected[i].best_class;
-		det->best_name = d->names[best_class];
+	for (det = dets->list, i = 0; i < n_dets; ++i) {
+		best_class = -1;
+		det->best_name = NULL;
 		det->names_count = 0;
-		convert_box(&det->box, &selected[i].det.bbox);
+		convert_box(&det->box, &raw_dets[i].bbox);
 		for (j = 0; j < layer->classes; ++j) {
-			if (selected[i].det.prob[j] > d->thresh) {
-				++det->names_count;
+			if (raw_dets[i].prob[j] <= d->thresh) {
+				continue;
 			}
+			if (best_class == -1 ||
+			    (raw_dets[i].prob[j] >
+			     raw_dets[i].prob[best_class])) {
+				best_class = j;
+			}
+			++det->names_count;
 		}
+		if (best_class == -1) {
+			continue;
+		}
+		det->best_name = d->names[best_class];
 		det->names = malloc(sizeof(char *) * (det->names_count + 1));
 		det->prob = malloc(sizeof(float) * (det->names_count));
 		if (!det->names || !det->prob) {
 			return -ENOMEM;
 		}
 		for (j = 0, k = 0; j < layer->classes; ++j) {
-			if (selected[i].det.prob[j] > d->thresh) {
+			if (raw_dets[i].prob[j] > d->thresh) {
 				det->names[k] = d->names[j];
-				det->prob[k] = selected[i].det.prob[j];
+				det->prob[k] = raw_dets[i].prob[j];
 				k++;
 			}
 		}
 		det->names[det->names_count] = NULL;
+		++det;
 	}
+	dets->length = det - dets->list;
 	return 0;
 }
 
@@ -605,4 +655,212 @@ int darknet_detector_test(darknet_detector_t *d, const char *file,
 	free_image(sized_img);
 	free_detections(dets, n_dets);
 	return 0;
+}
+
+// Modified from darknet\src\detector.c:42
+void darknet_detector_train(darknet_detector_t *d)
+{
+	list *options = d->datacfg->options;
+	char *train_images =
+	    option_find_str(options, "train", "data/train.txt");
+	char *valid_images = option_find_str(options, "valid", train_images);
+	char *backup_directory = option_find_str(options, "backup", "/backup/");
+	int train_images_num = 0;
+	float avg_loss = -1;
+
+	int i;
+	int gpu = gpu_index;
+	int ngpus = 1;
+	int *gpus = &gpu;
+	int seed = rand();
+
+	network net;
+	network *nets = calloc(ngpus, sizeof(network));
+
+	if (ngpus > 1) {
+		for (i = 1; i < ngpus; ++i) {
+			srand(seed);
+#ifdef GPU
+			cuda_set_device(gpus[i]);
+#endif
+			init_network(&nets[i], d->net->cfg, 1);
+			load_weights(&nets[i], d->net->file);
+			nets[i].learning_rate *= ngpus;
+		}
+	} else {
+		nets[0] = d->net->net;
+	}
+	net = nets[0];
+
+	int imgs = net.batch * net.subdivisions * ngpus;
+	const int actual_batch_size = net.batch * net.subdivisions;
+
+	if (actual_batch_size == 1) {
+		darknet_throw(DARKNET_ARG_ERROR,
+			      "You set incorrect value batch=1 for Training! "
+			      "You should set batch=64 subdivision=64");
+	} else if (actual_batch_size < 64) {
+		printf("\n Warning: You set batch=%d lower than 64! It is "
+		       "recommended to set batch=64 subdivision=64 \n",
+		       actual_batch_size);
+	}
+	printf("Learning Rate: %g, Momentum: %g, Decay: %g\n",
+	       net.learning_rate, net.momentum, net.decay);
+
+	data train, buffer;
+	layer l = net.layers[net.n - 1];
+
+	int classes = l.classes;
+	float jitter = l.jitter;
+
+	list *plist = get_paths(train_images);
+	char **paths = (char **)list_to_array(plist);
+
+	int init_w = net.w;
+	int init_h = net.h;
+	int iter_save, iter_save_last, iter_map;
+	iter_save = get_current_batch(net);
+	iter_save_last = get_current_batch(net);
+	iter_map = get_current_batch(net);
+	float mean_average_precision = -1;
+
+	load_args args = { 0 };
+
+	args.w = net.w;
+	args.h = net.h;
+	args.c = net.c;
+	args.paths = paths;
+	args.n = imgs;
+	args.m = plist->size;
+	args.classes = classes;
+	args.flip = net.flip;
+	args.jitter = jitter;
+	args.num_boxes = l.max_boxes;
+	args.d = &buffer;
+	args.type = DETECTION_DATA;
+	args.threads = 16;
+
+	args.angle = net.angle;
+	args.exposure = net.exposure;
+	args.saturation = net.saturation;
+	args.hue = net.hue;
+
+	double time;
+	int count = 0;
+	const char *base = d->datacfg->name;
+	pthread_t load_thread = load_data(args);
+
+	while (get_current_batch(net) < net.max_batches) {
+		if (l.random && count++ % 10 == 0) {
+			printf("Resizing\n");
+			float random_val = rand_scale(1.4);    // *x or /x
+			int dim_w = roundl(random_val * init_w / 32) * 32;
+			int dim_h = roundl(random_val * init_h / 32) * 32;
+
+			if (dim_w < 32) {
+				dim_w = 32;
+			}
+			if (dim_h < 32) {
+				dim_h = 32;
+			}
+			printf("%d x %d \n", dim_w, dim_h);
+			args.w = dim_w;
+			args.h = dim_h;
+
+			pthread_join(load_thread, 0);
+			train = buffer;
+			free_data(train);
+			load_thread = load_data(args);
+
+			for (i = 0; i < ngpus; ++i) {
+				resize_network(nets + i, dim_w, dim_h);
+			}
+			net = nets[0];
+		}
+		time = what_time_is_it_now();
+		pthread_join(load_thread, 0);
+		train = buffer;
+		load_thread = load_data(args);
+
+		printf("Loaded: %lf seconds\n", (what_time_is_it_now() - time));
+
+		time = what_time_is_it_now();
+		float loss = 0;
+#ifdef GPU
+		if (ngpus == 1) {
+			loss = train_network(net, train);
+		} else {
+			loss = train_networks(nets, ngpus, train, 4);
+		}
+#else
+		loss = train_network(net, train);
+#endif
+		if (avg_loss < 0 || avg_loss != avg_loss) {
+			avg_loss = loss;    // if(-inf or nan)
+		}
+		avg_loss = avg_loss * .9 + loss * .1;
+
+		i = get_current_batch(net);
+		if (net.cudnn_half) {
+			if (i < net.burn_in) {
+				printf("\n Tensor Cores are disabled until the "
+				       "first %d iterations are reached.",
+				       2 * net.burn_in);
+			} else {
+				printf("\n Tensor Cores are used.");
+			}
+		}
+		printf(
+		    "\n %d: %f, %f avg loss, %f rate, %lf seconds, %d images\n",
+		    get_current_batch(net), loss, avg_loss,
+		    get_current_rate(net), (what_time_is_it_now() - time),
+		    i * imgs);
+
+		if (i >= (iter_save + 1000)) {
+			iter_save = i;
+#ifdef GPU
+			if (ngpus != 1) {
+				sync_nets(nets, ngpus, 0);
+			}
+#endif
+			char buff[256];
+			sprintf(buff, "%s/%s_%d.weights", backup_directory,
+				base, i);
+			save_weights(net, buff);
+		}
+		if (i >= (iter_save_last + 100)) {
+			iter_save_last = i;
+#ifdef GPU
+			if (ngpus != 1) {
+				sync_nets(nets, ngpus, 0);
+			}
+#endif
+			char buff[256];
+			sprintf(buff, "%s/%s_last.weights", backup_directory,
+				base);
+			save_weights(net, buff);
+		}
+		free_data(train);
+	}
+#ifdef GPU
+	if (ngpus != 1) {
+		sync_nets(nets, ngpus, 0);
+	}
+#endif
+	char buff[256];
+	sprintf(buff, "%s/%s_final.weights", backup_directory, base);
+	save_weights(net, buff);
+
+	// free memory
+	pthread_join(load_thread, 0);
+	free_data(buffer);
+
+	free(paths);
+	free_list_contents(plist);
+	free_list(plist);
+
+	free_list_contents_kvp(options);
+	free_list(options);
+
+	free(nets);
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 #include "../include/darknet.h"
@@ -22,13 +23,13 @@ void print_detections(const darknet_detections_t *dets)
 	}
 }
 
-int main(int argc, char *argv[])
+int detect(void)
 {
 	clock_t c;
 	int code = 0;
 
-	// initialize variables so that darknet can check if they need to
-	// destroyed them after catching exception
+	// initialize variables so that darknet can check if they need to be
+	// destroyed after catching exception
 	darknet_config_t *cfg = NULL;
 	darknet_dataconfig_t *datacfg = NULL;
 	darknet_detections_t dets = { 0 };
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
 	darknet_try
 	{
 		cfg = darknet_config_load("cfg/yolov3.cfg");
-		datacfg = darknet_dataconfig_load("cfg/cocos.data");
+		datacfg = darknet_dataconfig_load("cfg/coco.data");
 
 		net = darknet_network_create(cfg);
 		darknet_network_load_weights(net, "yolov3.weights");
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 	}
 	darknet_catch(err)
 	{
-		printf("error: %s\n", darknet_get_error_string(err));
+		printf("error: %s\n", darknet_get_last_error_string());
 		code = -1;
 	}
 	darknet_etry;
@@ -67,4 +68,53 @@ int main(int argc, char *argv[])
 	darknet_detector_destroy(d);
 	darknet_network_destroy(net);
 	return code;
+}
+
+int train(void)
+{
+	int code = 0;
+	darknet_config_t *cfg = NULL;
+	darknet_dataconfig_t *datacfg = NULL;
+	darknet_detector_t *d = NULL;
+	darknet_network_t *net = NULL;
+
+	darknet_try
+	{
+		cfg = darknet_config_load("train/yieldsign.cfg");
+		datacfg = darknet_dataconfig_load("train/yieldsign.data");
+		// Reset wrokdir to the train
+		darknet_config_set_workdir(cfg, "train");
+		darknet_dataconfig_set_workdir(datacfg, "train");
+
+		net = darknet_network_create(cfg);
+		darknet_network_load_weights(net, "train/darknet53.conv.74");
+		d = darknet_detector_create(net, datacfg);
+		darknet_detector_train(d);
+	}
+	darknet_catch(err)
+	{
+		printf("error: %s\n", darknet_get_last_error_string());
+		code = -1;
+	}
+	darknet_etry;
+
+	darknet_config_destroy(cfg);
+	darknet_dataconfig_destroy(datacfg);
+	darknet_detector_destroy(d);
+	darknet_network_destroy(net);
+	return code;
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc > 1) {
+		if (strcmp(argv[1], "detect") == 0) {
+			return detect();
+		} else if (strcmp(argv[1], "train") == 0) {
+			return train();
+		} else {
+			return -1;
+		}
+	}
+	return detect();
 }

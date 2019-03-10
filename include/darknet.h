@@ -1,6 +1,9 @@
 #ifndef DARKNET_H
 #define DARKNET_H
 
+#ifdef DARKNET_API
+#undef DARKNET_API
+#endif
 #if defined(__GNUC__)
 #define DARKNET_API extern
 #else
@@ -51,6 +54,7 @@ struct darknet_detections {
 
 typedef enum darknet_error {
 	DARKNET_ERROR = 1,
+	DARKNET_ARG_ERROR,
 	DARKNET_IO_ERROR,
 	DARKNET_DETECTOR_ERROR,
 	DARKNET_CUDA_ERROR
@@ -83,7 +87,7 @@ DARKNET_API darknet_error_t darknet_last_error;
 
 DARKNET_API void darknet_set_error(darknet_error_t err, const char *format,
 				   ...);
-DARKNET_API const char *darknet_get_error_string(darknet_error_t err);
+DARKNET_API const char *darknet_get_last_error_string(void);
 
 DARKNET_API void darknet_detections_destroy(darknet_detections_t *d);
 DARKNET_API void darknet_detector_destroy(darknet_detector_t *d);
@@ -98,6 +102,8 @@ DARKNET_API size_t darknet_config_set_workdir(darknet_config_t *cfg,
 
 DARKNET_API darknet_dataconfig_t *darknet_dataconfig_load(const char *file);
 
+DARKNET_API int darknet_dataconfig_get_classes(darknet_dataconfig_t *cfg);
+
 DARKNET_API size_t darknet_dataconfig_set_workdir(darknet_dataconfig_t *cfg,
 						  const char *workdir);
 
@@ -111,6 +117,8 @@ DARKNET_API darknet_detector_t *darknet_detector_create(
 
 DARKNET_API int darknet_detector_test(darknet_detector_t *d, const char *file,
 				      darknet_detections_t *results);
+
+DARKNET_API void darknet_detector_train(darknet_detector_t *d);
 
 DARKNET_END_HEADER
 

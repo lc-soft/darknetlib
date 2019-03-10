@@ -1,22 +1,25 @@
+#include "utils.h"
+#include "../include/darknet.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <assert.h>
 #include <float.h>
 #include <limits.h>
+#include "darkunistd.h"
 #ifdef WIN32
-#include "unistd.h"
 #include "gettimeofday.h"
 #else
-#include <unistd.h>
 #include <sys/time.h>
 #endif
 
-#include "darknet.h"
-#include "utils.h"
-
+#ifndef USE_CMAKE_LIBS
 #pragma warning(disable : 4996)
+#endif
 
 double what_time_is_it_now()
 {
@@ -37,7 +40,7 @@ int *read_map(char *filename)
 		file_error(filename);
 	while ((str = fgetl(file))) {
 		++n;
-		map = realloc(map, n * sizeof(int));
+		map = (int *)realloc(map, n * sizeof(int));
 		map[n - 1] = atoi(str);
 	}
 	return map;
@@ -57,9 +60,9 @@ void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
 void shuffle(void *arr, size_t n, size_t size)
 {
 	size_t i;
-	void *swp = calloc(1, size);
+	void *swp = (void *)calloc(1, size);
 	for (i = 0; i < n - 1; ++i) {
-		size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+		size_t j = i + random_gen() / (RAND_MAX / (n - i) + 1);
 		memcpy(swp, (char *)arr + (j * size), size);
 		memcpy((char *)arr + (j * size), (char *)arr + (i * size),
 		       size);
@@ -178,9 +181,9 @@ void pm(int M, int N, float *A)
 	printf("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+void find_replace(const char *str, char *orig, char *rep, char *output)
 {
-	char *buffer = calloc(8192, sizeof(char));
+	char *buffer = (char *)calloc(8192, sizeof(char));
 	char *p;
 
 	sprintf(buffer, "%s", str);
@@ -198,7 +201,7 @@ void find_replace(char *str, char *orig, char *rep, char *output)
 
 void trim(char *str)
 {
-	char *buffer = calloc(8192, sizeof(char));
+	char *buffer = (char *)calloc(8192, sizeof(char));
 	sprintf(buffer, "%s", str);
 
 	char *p = buffer;
@@ -216,7 +219,7 @@ void trim(char *str)
 
 void find_replace_extension(char *str, char *orig, char *rep, char *output)
 {
-	char *buffer = calloc(8192, sizeof(char));
+	char *buffer = (char *)calloc(8192, sizeof(char));
 
 	sprintf(buffer, "%s", str);
 	char *p = strstr(buffer, orig);
@@ -235,7 +238,7 @@ void find_replace_extension(char *str, char *orig, char *rep, char *output)
 	free(buffer);
 }
 
-void replace_image_to_label(char *input_path, char *output_path)
+void replace_image_to_label(const char *input_path, char *output_path)
 {
 	find_replace(input_path, "/images/train2014/", "/labels/train2014/",
 		     output_path);    // COCO
@@ -312,6 +315,7 @@ void file_error(char *s)
 	exit(EXIT_FAILURE);
 }
 
+
 list *split_str(char *s, char delim)
 {
 	size_t i;
@@ -386,7 +390,7 @@ char *fgetl(FILE *fp)
 	if (feof(fp))
 		return 0;
 	size_t size = 512;
-	char *line = malloc(size * sizeof(char));
+	char *line = (char *)malloc(size * sizeof(char));
 	if (!fgets(line, size, fp)) {
 		free(line);
 		return 0;
@@ -397,7 +401,7 @@ char *fgetl(FILE *fp)
 	while ((line[curr - 1] != '\n') && !feof(fp)) {
 		if (curr == size - 1) {
 			size *= 2;
-			line = realloc(line, size * sizeof(char));
+			line = (char *)realloc(line, size * sizeof(char));
 			if (!line) {
 				printf("%ld\n", size);
 				malloc_error();
@@ -484,7 +488,7 @@ void write_all(int fd, char *buffer, size_t bytes)
 
 char *copy_string(char *s)
 {
-	char *copy = malloc(strlen(s) + 1);
+	char *copy = (char *)malloc(strlen(s) + 1);
 	strncpy(copy, s, strlen(s) + 1);
 	return copy;
 }
@@ -522,7 +526,7 @@ int count_fields(char *line)
 
 float *parse_fields(char *line, int n)
 {
-	float *field = calloc(n, sizeof(float));
+	float *field = (float *)calloc(n, sizeof(float));
 	char *c, *p, *end;
 	int count = 0;
 	int done = 0;
@@ -674,6 +678,21 @@ int sample_array(float *a, int n)
 	return n - 1;
 }
 
+int sample_array_custom(float *a, int n)
+{
+	float sum = sum_array(a, n);
+	scale_array(a, n, 1. / sum);
+	float r = rand_uniform(0, 1);
+	int start_index = rand_int(0, 0);
+	int i;
+	for (i = 0; i < n; ++i) {
+		r = r - a[(i + start_index) % n];
+		if (r <= 0)
+			return i;
+	}
+	return n - 1;
+}
+
 int max_index(float *a, int n)
 {
 	if (n <= 0)
@@ -687,6 +706,33 @@ int max_index(float *a, int n)
 		}
 	}
 	return max_i;
+}
+
+int top_max_index(float *a, int n, int k)
+{
+	float *values = (float *)calloc(k, sizeof(float));
+	int *indexes = (int *)calloc(k, sizeof(int));
+	if (n <= 0)
+		return -1;
+	int i, j;
+	for (i = 0; i < n; ++i) {
+		for (j = 0; j < k; ++j) {
+			if (a[i] > values[j]) {
+				values[j] = a[i];
+				indexes[j] = i;
+				break;
+			}
+		}
+	}
+	int count = 0;
+	for (j = 0; j < k; ++j)
+		if (values[j] > 0)
+			count++;
+	int get_index = rand_int(0, count - 1);
+	int val = indexes[get_index];
+	free(indexes);
+	free(values);
+	return val;
 }
 
 int int_index(int *a, int val, int n)
@@ -706,7 +752,7 @@ int rand_int(int min, int max)
 		min = max;
 		max = s;
 	}
-	int r = (rand() % (max - min + 1)) + min;
+	int r = (random_gen() % (max - min + 1)) + min;
 	return r;
 }
 
@@ -723,11 +769,11 @@ float rand_normal()
 
 	haveSpare = 1;
 
-	rand1 = rand() / ((double)RAND_MAX);
+	rand1 = random_gen() / ((double)RAND_MAX);
 	if (rand1 < 1e-100)
 		rand1 = 1e-100;
 	rand1 = -2 * log(rand1);
-	rand2 = (rand() / ((double)RAND_MAX)) * TWO_PI;
+	rand2 = (random_gen() / ((double)RAND_MAX)) * 2.0 * M_PI;
 
 	return sqrt(rand1) * cos(rand2);
 }
@@ -738,20 +784,21 @@ float rand_normal()
    int n = 12;
    int i;
    float sum= 0;
-   for(i = 0; i < n; ++i) sum += (float)rand()/RAND_MAX;
+   for(i = 0; i < n; ++i) sum += (float)random_gen()/RAND_MAX;
    return sum-n/2.;
    }
  */
 
 size_t rand_size_t()
 {
-	return ((size_t)(rand() & 0xff) << 56) |
-	       ((size_t)(rand() & 0xff) << 48) |
-	       ((size_t)(rand() & 0xff) << 40) |
-	       ((size_t)(rand() & 0xff) << 32) |
-	       ((size_t)(rand() & 0xff) << 24) |
-	       ((size_t)(rand() & 0xff) << 16) |
-	       ((size_t)(rand() & 0xff) << 8) | ((size_t)(rand() & 0xff) << 0);
+	return ((size_t)(random_gen() & 0xff) << 56) |
+	       ((size_t)(random_gen() & 0xff) << 48) |
+	       ((size_t)(random_gen() & 0xff) << 40) |
+	       ((size_t)(random_gen() & 0xff) << 32) |
+	       ((size_t)(random_gen() & 0xff) << 24) |
+	       ((size_t)(random_gen() & 0xff) << 16) |
+	       ((size_t)(random_gen() & 0xff) << 8) |
+	       ((size_t)(random_gen() & 0xff) << 0);
 }
 
 float rand_uniform(float min, float max)
@@ -761,7 +808,13 @@ float rand_uniform(float min, float max)
 		min = max;
 		max = swap;
 	}
-	return ((float)rand() / RAND_MAX * (max - min)) + min;
+
+	if (RAND_MAX < 65536) {
+		int rnd = rand() * (RAND_MAX + 1) + rand();
+		return ((float)rnd / (RAND_MAX * RAND_MAX) * (max - min)) + min;
+	} else {
+		return ((float)rand() / RAND_MAX * (max - min)) + min;
+	}
 	// return (random_float() * (max - min)) + min;
 }
 
@@ -776,9 +829,9 @@ float rand_scale(float s)
 float **one_hot_encode(float *a, int n, int k)
 {
 	int i;
-	float **t = calloc(n, sizeof(float *));
+	float **t = (float **)calloc(n, sizeof(float *));
 	for (i = 0; i < n; ++i) {
-		t[i] = calloc(k, sizeof(float));
+		t[i] = (float *)calloc(k, sizeof(float));
 		int index = (int)a[i];
 		t[i][index] = 1;
 	}
@@ -792,6 +845,9 @@ unsigned int random_gen()
 	rand_s(&rnd);
 #else
 	rnd = rand();
+	if (RAND_MAX < 65536) {
+		rnd = rand() * (RAND_MAX + 1) + rnd;
+	}
 #endif
 	return rnd;
 }
@@ -813,4 +869,51 @@ float rand_uniform_strong(float min, float max)
 		max = swap;
 	}
 	return (random_float() * (max - min)) + min;
+}
+
+float rand_precalc_random(float min, float max, float random_part)
+{
+	if (max < min) {
+		float swap = min;
+		min = max;
+		max = swap;
+	}
+	return (random_part * (max - min)) + min;
+}
+
+#define RS_SCALE (1.0 / (1.0 + RAND_MAX))
+
+double double_rand(void)
+{
+	double d;
+	do {
+		d = (((rand() * RS_SCALE) + rand()) * RS_SCALE + rand()) *
+		    RS_SCALE;
+	} while (d >= 1);    // Round off
+	return d;
+}
+
+unsigned int uint_rand(unsigned int less_than)
+{
+	return (unsigned int)((less_than)*double_rand());
+}
+
+int check_array_is_nan(float *arr, int size)
+{
+	int i;
+	for (i = 0; i < size; ++i) {
+		if (isnan(arr[i]))
+			return 1;
+	}
+	return 0;
+}
+
+int check_array_is_inf(float *arr, int size)
+{
+	int i;
+	for (i = 0; i < size; ++i) {
+		if (isinf(arr[i]))
+			return 1;
+	}
+	return 0;
 }
