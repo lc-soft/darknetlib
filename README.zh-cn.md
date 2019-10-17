@@ -26,16 +26,21 @@ Darknetlib 是 [darknet](http://pjreddie.com/darknet/) 的 C API 库，主要为
 
 ### 在 Windows 中使用
 
-**构建：**
+使用 lcpkg 安装：
+
+```bash
+lcpkg install github.com/lc-soft/darknetlib
+```
+
+这种方式安装的是纯 CPU 运算的版本，如果你需要带 GPU 加速的版本，请前往[发行版页面](https://github.com/lc-soft/darknetlib/releases)手动下载。
+
+如果你想手动从源码构建的话：
 
 1. 下载安装 [CUDA](https://developer.nvidia.com/cuda-downloads)
 1. 下载 [cuDNN](https://developer.nvidia.com/cudnn) 并解压到 `3rdparty` 目录
 1. 使用 Visual Studio 打开 `build/darknet.sln`
 1. 设置配置为 **Release** 和 **x64**
 1. 构建 darknet_gpu 和 test 项目
-
-**运行：**
-
 1. 下载 [yolov3-tiny.weights](https://pjreddie.com/media/files/yolov3-tiny.weights) 文件至 `test` 目录
 1. 在 Visual Studio 中按 F5 键运行测试程序
 

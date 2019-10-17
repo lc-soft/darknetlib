@@ -27,16 +27,21 @@ It mainly provides object detection support for [LC-Finder](https://github.com/l
 
 ### Use on Windows
 
-**Build:**
+Install with [lcpkg](https://github.com/lc-soft/lcpkg):
+
+```bash
+lcpkg install github.com/lc-soft/darknetlib
+```
+
+Darknetlib installed in this way is the pure CPU computing version, If you need gpu-accelerated version, please go to [Release] page to download.
+
+If you want to build from source code:
 
 1. Download and install [CUDA](https://developer.nvidia.com/cuda-downloads)
 1. Download [cuDNN](https://developer.nvidia.com/cudnn) and unpack files to hte `3rdparty` directory
 1. Open `build/darknet.sln` whith Visual Studio 2017
 1. Set **Release** and **x64**
 1. build **darknet_gpu** and **test** project
-
-**Run:**
-
 1. Download the [yolov3-tiny.weights](https://pjreddie.com/media/files/yolov3-tiny.weights) file to the `test` directory
 1. Run the test
 
