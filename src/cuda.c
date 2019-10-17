@@ -353,7 +353,6 @@ int get_gpu_compute_capability(int i)
 }
 
 #else    // GPU
-#include "darknet.h"
 void cuda_set_device(int n)
 {
 }

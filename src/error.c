@@ -3,9 +3,9 @@
 #include <string.h>
 #include "../include/darknet.h"
 
-DARKNET_API jmp_buf darknet_jmp_buf;
-DARKNET_API int darknet_jmp_buf_valid = 0;
-DARKNET_API darknet_error_t darknet_last_error = 0;
+jmp_buf darknet_jmp_buf;
+int darknet_jmp_buf_valid = 0;
+darknet_error_t darknet_last_error = 0;
 
 static char error_string[1024] = { 0 };
 

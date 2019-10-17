@@ -1,9 +1,6 @@
 #include <errno.h>
 #include "build.h"
-#include "darknet.h"
-#include "../darknet/include/darknet.h"
 #include "../darknet/src/list.h"
-#include "../darknet/src/utils.h"
 #include "../darknet/src/option_list.h"
 #include "../darknet/src/network.h"
 #include "../darknet/src/parser.h"
@@ -260,7 +257,7 @@ static int load_weights_file(network *net, const char *filename)
 	return 0;
 }
 
-// Modified from darknet\src\parser.c:710
+// Modified from darknet\src\parser.c:860
 static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 {
 	section *s;
@@ -313,7 +310,7 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 		layer l = { (LAYER_TYPE)0 };
 		LAYER_TYPE lt = string_to_layer_type(s->type);
 		if (lt == CONVOLUTIONAL) {
-			l = parse_convolutional(options, params);
+			l = parse_convolutional(options, params, net);
 		} else if (lt == LOCAL) {
 			l = parse_local(options, params);
 		} else if (lt == ACTIVE) {
@@ -324,6 +321,8 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 			l = parse_gru(options, params);
 		} else if (lt == LSTM) {
 			l = parse_lstm(options, params);
+		} else if (lt == CONV_LSTM) {
+			l = parse_conv_lstm(options, params);
 		} else if (lt == CRNN) {
 			l = parse_crnn(options, params);
 		} else if (lt == CONNECTED) {
@@ -365,8 +364,28 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 			l = parse_shortcut(options, params, net);
 			net.layers[count - 1].use_bin_output = 0;
 			net.layers[l.index].use_bin_output = 0;
+		} else if (lt == SCALE_CHANNELS) {
+			l = parse_scale_channels(options, params, net);
+			net.layers[count - 1].use_bin_output = 0;
+			net.layers[l.index].use_bin_output = 0;
+		} else if (lt == SAM) {
+			l = parse_sam(options, params, net);
+			net.layers[count - 1].use_bin_output = 0;
+			net.layers[l.index].use_bin_output = 0;
 		} else if (lt == DROPOUT) {
 			l = parse_dropout(options, params);
+			l.output = net.layers[count - 1].output;
+			l.delta = net.layers[count - 1].delta;
+#ifdef GPU
+			l.output_gpu = net.layers[count - 1].output_gpu;
+			l.delta_gpu = net.layers[count - 1].delta_gpu;
+#endif
+		} else if (lt == EMPTY) {
+			layer empty_layer;
+			empty_layer.out_w = params.w;
+			empty_layer.out_h = params.h;
+			empty_layer.out_c = params.c;
+			l = empty_layer;
 			l.output = net.layers[count - 1].output;
 			l.delta = net.layers[count - 1].delta;
 #ifdef GPU
@@ -399,10 +418,17 @@ static int init_network(network *out_net, darknet_config_t *cfg, int batch)
 		n = n->next;
 		++count;
 		if (n) {
-			params.h = l.out_h;
-			params.w = l.out_w;
-			params.c = l.out_c;
-			params.inputs = l.outputs;
+			if (l.antialiasing) {
+				params.h = l.input_layer->out_h;
+				params.w = l.input_layer->out_w;
+				params.c = l.input_layer->out_c;
+				params.inputs = l.input_layer->outputs;
+			} else {
+				params.h = l.out_h;
+				params.w = l.out_w;
+				params.c = l.out_c;
+				params.inputs = l.outputs;
+			}
 		}
 		if (l.bflops > 0)
 			bflops += l.bflops;
@@ -863,4 +889,18 @@ void darknet_detector_train(darknet_detector_t *d)
 	free_list(options);
 
 	free(nets);
+}
+
+int wait_key_cv(int delay)
+{
+	return 0;
+}
+
+int wait_until_press_key_cv()
+{
+	return 0;
+}
+
+void destroy_all_windows_cv()
+{
 }
