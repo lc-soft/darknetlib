@@ -1,0 +1,33 @@
+{
+  "name": "darknetlib",
+  "version": "0.2.0",
+  "description": "C library for wrapping darknet",
+  "author": "Liu",
+  "arch": [
+    "x86",
+    "x64"
+  ],
+  "platform": [
+    "windows"
+  ],
+  "mode": [
+    "debug",
+    "release"
+  ],
+  "package": {
+    "output": "lcpkg/dist",
+    "entry": {
+      "lib": "build/darknet/${arch}-${platform}/${mode}",
+      "bin": "build/darknet/${arch}-${platform}/${mode}",
+      "content": "",
+      "include": "include"
+    }
+  },
+  "dependencies": {
+    "pthreads": {
+      "version": "latest",
+      "uri": "vcpkg:pthreads",
+      "linkage": "static"
+    }
+  }
+}
