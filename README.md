@@ -33,7 +33,7 @@ Install with [lcpkg](https://github.com/lc-soft/lcpkg):
 lcpkg install github.com/lc-soft/darknetlib
 ```
 
-Darknetlib installed in this way is the pure CPU computing version, If you need gpu-accelerated version, please go to [Release] page to download.
+Darknetlib installed in this way is the pure CPU computing version, If you need gpu-accelerated version, please go to [Release](https://github.com/lc-soft/darknetlib/releases) page to download.
 
 If you want to build from source code:
 
