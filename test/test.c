@@ -9,7 +9,7 @@ void print_detections(const darknet_detections_t *dets)
 	size_t i, j;
 	darknet_detection_t *det;
 
-	printf("detections:\n");
+	printf("\ndetections:\n");
 	for (i = 0; i < dets->length; ++i) {
 		det = &dets->list[i];
 		printf("[%zu] best name: %s, box: (%g, %g, %g, %g)\n", i,
@@ -20,6 +20,7 @@ void print_detections(const darknet_detections_t *dets)
 			printf("%s, %g%%\n", det->names[j],
 			       det->prob[j] * 100.0f);
 		}
+		printf("\n");
 	}
 }
 
@@ -39,23 +40,24 @@ int detect(void)
 	c = clock();
 	darknet_try
 	{
-		cfg = darknet_config_load("cfg/yolov3.cfg");
+		cfg = darknet_config_load("cfg/yolov3-tiny.cfg");
 		datacfg = darknet_dataconfig_load("cfg/coco.data");
 
 		net = darknet_network_create(cfg);
-		darknet_network_load_weights(net, "yolov3.weights");
+		darknet_network_load_weights(net, "yolov3-tiny.weights");
 		d = darknet_detector_create(net, datacfg);
 
-		printf("\ntime: %.2fs\n\n",
+		printf("[detector] weights file loaded (%.2fs)\n",
 		       (clock() - c) * 1.0f / CLOCKS_PER_SEC);
 		c = clock();
+		printf("[detector] detecting image...\n");
 		darknet_detector_test(d, "img/dog.jpg", &dets);
-		printf("\ntime: %.2fs\n\n",
-		       (clock() - c) * 1.0f / CLOCKS_PER_SEC);
+		printf("[detector] %lu objects have been detected (%.2fs)\n",
+		       dets.length, (clock() - c) * 1.0f / CLOCKS_PER_SEC);
 	}
 	darknet_catch(err)
 	{
-		printf("error: %s\n", darknet_get_last_error_string());
+		printf("error[%d]: %s\n", err, darknet_get_last_error_string());
 		code = -1;
 	}
 	darknet_etry;
