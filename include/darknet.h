@@ -7,7 +7,7 @@
 #if defined(__GNUC__)
 #define DARKNETLIB_API extern
 #else
-#ifdef DARKNET_EXPORTS
+#ifdef DARKNETLIB_EXPORTS
 #define DARKNETLIB_API __declspec(dllexport)
 #else
 #define DARKNETLIB_API __declspec(dllimport)

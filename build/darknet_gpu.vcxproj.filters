@@ -198,6 +198,15 @@
     <ClCompile Include="..\darknet\src\lstm_layer.c">
       <Filter>src\darknet</Filter>
     </ClCompile>
+    <ClCompile Include="..\darknet\src\scale_channels_layer.c">
+      <Filter>src\darknet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\darknet\src\sam_layer.c">
+      <Filter>src\darknet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\darknet\src\conv_lstm_layer.c">
+      <Filter>src\darknet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\darknet.h">
@@ -348,6 +357,15 @@
       <Filter>src\darknet</Filter>
     </ClInclude>
     <ClInclude Include="..\darknet\src\utils.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\scale_channels_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\sam_layer.h">
+      <Filter>src\darknet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\darknet\src\conv_lstm_layer.h">
       <Filter>src\darknet</Filter>
     </ClInclude>
   </ItemGroup>

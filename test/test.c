@@ -52,7 +52,7 @@ int detect(void)
 		c = clock();
 		printf("[detector] detecting image...\n");
 		darknet_detector_test(d, "img/dog.jpg", &dets);
-		printf("[detector] %lu objects have been detected (%.2fs)\n",
+		printf("[detector] %zu objects have been detected (%.2fs)\n",
 		       dets.length, (clock() - c) * 1.0f / CLOCKS_PER_SEC);
 	}
 	darknet_catch(err)
